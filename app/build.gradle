@@ -17,6 +17,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude("META-INF/*.kotlin_module")
+    }
+}
+configurations {
+    compile.exclude group: "junit", module: "junit"
 }
 
 dependencies {
@@ -31,4 +45,13 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    // Libraries needed for api call
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.google.apis:google-api-services-kgsearch:v1-rev20200210-1.30.9'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.2.0'
 }
