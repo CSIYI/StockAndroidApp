@@ -79,7 +79,6 @@ public class HomeFragment extends Fragment {
                     stockModel.setTicker(temp.getString("ticker"));
                     stockModel.setLast_price(temp.getString("price"));
                     stockModel.setChange(temp.getString("changes"));
-                    Log.d("DEBUG", stockModel.getTicker());
                     stockModelArrayList.add(stockModel);
                     StockAdapter stockAdapter = new StockAdapter(getActivity(), stockModelArrayList);
                     listView.setAdapter(stockAdapter);

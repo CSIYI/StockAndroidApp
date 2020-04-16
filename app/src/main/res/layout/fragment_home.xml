@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    <TextView
-        android:id="@+id/list_title"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:text="@string/list_title"
-        android:textAlignment="center"
-        android:textSize="25sp"
-        android:textColor="#ffffff"
-        android:gravity="center"
-        android:background="@color/colorPrimary"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <TextView-->
+<!--        android:id="@+id/list_title"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="70dp"-->
+<!--        android:text="@string/list_title"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textSize="25sp"-->
+<!--        android:textColor="#ffffff"-->
+<!--        android:gravity="center"-->
+<!--        android:background="@color/colorPrimary"-->
+<!--        app:layout_constraintHorizontal_chainStyle="spread"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <TextView
         android:id="@+id/column1"
@@ -24,11 +24,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="10dp"
         android:textAlignment="center"
         android:gravity="center"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
+        android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/column2"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,11 +41,12 @@
         android:id="@+id/column2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="10dp"
         android:textAlignment="center"
         android:gravity="center"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
+        android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/column3"
         app:layout_constraintStart_toEndOf="@+id/column1"
         app:layout_constraintTop_toTopOf="parent"
@@ -58,11 +60,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="10dp"
         android:textAlignment="center"
         android:gravity="center"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/column2"
@@ -73,7 +76,7 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
