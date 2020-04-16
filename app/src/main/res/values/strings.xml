@@ -3,4 +3,8 @@
     <string name="title_list">List</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_search">Search</string>
+    <string name="list_title">Most Active Stock Companies</string>
+    <string name="list_subTitle1">TICKER</string>
+    <string name="list_subTitle2">PRICE</string>
+    <string name="list_subTitle3">CHANGE</string>
 </resources>
