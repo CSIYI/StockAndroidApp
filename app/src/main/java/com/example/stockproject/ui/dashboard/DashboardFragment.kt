@@ -29,15 +29,15 @@ class DashboardFragment : Fragment() {
     private lateinit var indexList: RecyclerView
     private lateinit var dashboardViewModel: DashboardViewModel
 
-
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        dashboardViewModel = activity?.run {
+            ViewModelProviders.of(this).get(DashboardViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
 
         indexList = root.findViewById(R.id.dashboard_indexlist)
         stockList = root.findViewById(R.id.dashboard_stocklist)
-
-        dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
 
         // Observe Stock Info List
         stockList.layoutManager = LinearLayoutManager(context)
@@ -50,7 +50,6 @@ class DashboardFragment : Fragment() {
             indexList.adapter = IndexAdapter(context, it)
         })
 
-        dashboardViewModel.initData()
         return root
     }
 }

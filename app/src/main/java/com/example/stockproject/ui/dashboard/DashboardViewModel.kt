@@ -19,12 +19,12 @@ class DashboardViewModel : ViewModel() {
     val stockInfo = MutableLiveData<List<StockInfo>>()
     val indexInfo = MutableLiveData<List<IndexInfo>>()
 
-    fun initData() {
+    init {
         viewModelScope.launch {
             stockList
-                .map { async { StockAPI.fetchStockProfile(it) } }
-                .awaitAll()
-                .let { stockInfo.postValue(it) }
+                    .map { async { StockAPI.fetchStockProfile(it) } }
+                    .awaitAll()
+                    .let { stockInfo.postValue(it) }
         }
 
         viewModelScope.launch {
@@ -34,7 +34,6 @@ class DashboardViewModel : ViewModel() {
                     .let { indexInfo.postValue(it) }
         }
     }
-
 
 }
 
