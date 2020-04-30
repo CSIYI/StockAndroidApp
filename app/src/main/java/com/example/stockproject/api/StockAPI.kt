@@ -1,6 +1,7 @@
 package com.example.stockproject.api
 
 import android.content.Context
+import android.util.Log
 import com.example.stockproject.model.IndexInfo
 import com.example.stockproject.model.StockInfo
 import com.github.kittinunf.fuel.Fuel
@@ -27,6 +28,7 @@ object StockAPI {
                         .let { JsonParser.parseString(it) }
             }
 
+
     suspend fun fetchStockProfile(sym: String): StockInfo {
         val json = fetchAsync("$URL_BASE/company/profile/$sym")
                 .await()
@@ -37,8 +39,12 @@ object StockAPI {
             fullName = profileJson.get("companyName").asString
             price = profileJson.get("price").asDouble
             change = profileJson.get("changes").asDouble
+            volume = profileJson.get("volAvg").asLong
+            changePercent = changeStringRegex.find(profileJson.get("changesPercentage").asString)
+                    ?.groupValues?.get(1) ?: "+0.00"
         }
     }
+    private val changeStringRegex = "\\(([+-].+%)\\)".toRegex()
 
     suspend fun fetchIndexProfile(index: String, span: String): IndexInfo {
 

@@ -3,22 +3,28 @@ package com.example.stockproject.ui.dashboard
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import at.markushi.ui.CircleButton
 import com.example.stockproject.R
 import com.example.stockproject.model.IndexInfo
 import com.example.stockproject.model.StockInfo
+import com.example.stockproject.utils.toBigNumberString
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
+import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.item_dashboard_indexitem.view.*
 import kotlinx.android.synthetic.main.item_dashboard_stockitem.view.*
 
@@ -41,18 +47,44 @@ class DashboardFragment : Fragment() {
 
         // Observe Stock Info List
         stockList.layoutManager = LinearLayoutManager(context)
-        dashboardViewModel.stockInfo.observe(this, Observer {
-            stockList.adapter = StockAdapter(context, it)
-        })
-
+        stockList.isNestedScrollingEnabled = false
         indexList.layoutManager = LinearLayoutManager(context)
+        indexList.isNestedScrollingEnabled = false
+
+        dashboardViewModel.stockInfo.observe(this, Observer { updateStockList() })
+        dashboardViewModel.mode.observe(this, Observer { updateStockList() })
+
         dashboardViewModel.indexInfo.observe(this, Observer {
             indexList.adapter = IndexAdapter(context, it)
         })
-
+        root.findViewById<CircleButton>(R.id.btn_addstock).setOnClickListener(addStockOnClickListener)
+        root.findViewById<CircleButton>(R.id.btn_deletestock).setOnClickListener(deleteStockOnClickListener)
         return root
     }
+
+    private fun updateStockList() {
+        val info = dashboardViewModel.stockInfo.value ?: emptyList()
+        val mode = dashboardViewModel.mode.value ?: 0
+        stockList.adapter = StockAdapter(context!!, info, mode, modeChangeOnClickListener)
+    }
+
+    private val modeChangeOnClickListener: View.OnClickListener = View.OnClickListener {
+        val value = ((dashboardViewModel.mode.value ?: 0) + 1) % 3
+        dashboardViewModel.mode.postValue(value)
+    }
+
+    private val addStockOnClickListener: View.OnClickListener = View.OnClickListener {
+        val dialog = AddStockDialogFragment()
+        dialog.setPositiveCallback { text -> dashboardViewModel.addStockToList(text) }
+        dialog.show(fragmentManager, "test")
+    }
+
+    private val deleteStockOnClickListener: View.OnClickListener = View.OnClickListener {
+        dashboardViewModel.deleteLastStock()
+    }
+
 }
+
 class IndexAdapter(val context: Context?, val items: List<IndexInfo>): RecyclerView.Adapter<IndexAdapter.IndexVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndexVH =
@@ -64,21 +96,14 @@ class IndexAdapter(val context: Context?, val items: List<IndexInfo>): RecyclerV
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: IndexVH, position: Int) {
-        holder.tvDayHigh.text = items[position].dayHigh.toString()
-        holder.tvDayLow.text = items[position].dayLow.toString()
-        holder.tvSymbol.text = items[position].index
-        holder.tvPrice.text = items[position].price.toString()
-        holder.tvOpen.text = items[position].open.toString()
-
-        val volume = items[position].volume
-        holder.tvVolume.text = when {
-            volume >= 1000000000 -> String.format("%1$.2fB", volume / 100000000.0)
-            volume >= 1000000 -> String.format("%1$.2fM", volume / 1000000.0)
-            volume >= 1000 -> String.format("%1$.2fK", volume / 1000.0)
-            else -> volume.toString()
-        }
-
-        inflateLineChart(holder.chart, items[position].datapoint)
+        val item = items[position]
+        holder.tvDayHigh.text = item.dayHigh.toString()
+        holder.tvDayLow.text = item.dayLow.toString()
+        holder.tvSymbol.text = item.index
+        holder.tvPrice.text = item.price.toString()
+        holder.tvOpen.text = item.open.toString()
+        holder.tvVolume.text = item.volume.toBigNumberString()
+        inflateLineChart(holder.chart, item.datapoint)
     }
 
     private fun inflateLineChart(lineChart: LineChart, data: List<Double>) {
@@ -116,7 +141,12 @@ class IndexAdapter(val context: Context?, val items: List<IndexInfo>): RecyclerV
     }
 }
 
-class StockAdapter(val context: Context?, val items: List<StockInfo>): RecyclerView.Adapter<StockAdapter.StockVH>() {
+class StockAdapter(
+        val context: Context,
+        val items: List<StockInfo>,
+        val mode: Int,
+        val modeChangeListener: View.OnClickListener
+): RecyclerView.Adapter<StockAdapter.StockVH>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StockVH =
             LayoutInflater
                     .from(context)
@@ -126,11 +156,21 @@ class StockAdapter(val context: Context?, val items: List<StockInfo>): RecyclerV
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: StockVH, position: Int) {
-        holder.tvSymbol.text = items[position].symbol
-        holder.tvFullName.text = items[position].fullName
-        holder.tvPrice.text = items[position].price.toString()
-        holder.btnInfo.text = items[position].change.toString()
+        val item = items[position]
+        holder.tvSymbol.text = item.symbol
+        holder.tvFullName.text = item.fullName
+        holder.tvPrice.text = item.price.toString()
+        val green = ContextCompat.getColor(context, R.color.robinhoodGreen)
+        val red = ContextCompat.getColor(context, R.color.robinhoodRed)
+        holder.tvPrice.setTextColor(if (item.change >= 0) green else red)
+        holder.btnInfo.text = when(mode) {
+            0 -> item.volume.toBigNumberString()
+            1 -> (if (item.change>0) "+" else "") + item.change.toString()
+            else -> item.changePercent
+        }
 
+//        holder.btnInfo.setbackgrount()
+        holder.btnInfo.setOnClickListener(modeChangeListener)
     }
 
     class StockVH(view: View): RecyclerView.ViewHolder(view) {
