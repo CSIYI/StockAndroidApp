@@ -3,10 +3,15 @@
     <string name="title_list">List</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_search">Search</string>
-    <string name="list_title">Most Active Stock Companies</string>
+    <string name="list_title">Most Active Stock List</string>
     <string name="list_subTitle1">TICKER</string>
     <string name="list_subTitle2">PRICE</string>
     <string name="list_subTitle3">CHANGE</string>
     <string name="search_message">Enter a company name</string>
     <string name="search_button">Search</string>
+    <string-array name="list_array">
+        <item>Most Active Stock Companies</item>
+        <item>Most Gainer Stock Companies</item>
+        <item>Most Loser Stock Companies</item>
+    </string-array>
 </resources>

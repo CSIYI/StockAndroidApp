@@ -59,9 +59,9 @@ public class StockAdapter extends BaseAdapter {
         viewHolder.stock_change.setText(stockModelArrayList.get(position).getChange());
 
         if (stockModelArrayList.get(position).getChange().charAt(0) == '-') {
-            viewHolder.stock_ticker.setTextColor(Color.RED);
-            viewHolder.stock_lastPrice.setTextColor(Color.RED);
-            viewHolder.stock_change.setTextColor(Color.RED);
+            viewHolder.stock_ticker.setTextColor(context.getResources().getColor(R.color.robinhoodRed));
+            viewHolder.stock_lastPrice.setTextColor(context.getResources().getColor(R.color.robinhoodRed));
+            viewHolder.stock_change.setTextColor(context.getResources().getColor(R.color.robinhoodRed));
         }
 
         return convertView;
