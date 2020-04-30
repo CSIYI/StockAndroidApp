@@ -3,4 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="robinhoodGreen">#21ce99</color>
+    <color name="robinhoodRed">#f45531</color>
 </resources>

@@ -7,4 +7,6 @@
     <string name="list_subTitle1">TICKER</string>
     <string name="list_subTitle2">PRICE</string>
     <string name="list_subTitle3">CHANGE</string>
+    <string name="search_message">Enter a company name</string>
+    <string name="search_button">Search</string>
 </resources>
